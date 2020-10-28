@@ -14,7 +14,8 @@ import { OrderModule } from './order/order.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      synchronize: true,
+      entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
+      synchronize: true, // TODO: remove this in production
     }),
     GraphQLModule.forRoot({ autoSchemaFile: true }),
     ProductModule,
