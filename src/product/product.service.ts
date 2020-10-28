@@ -11,15 +11,15 @@ export class ProductService {
     private productRepository: Repository<ProductEntity>,
   ) {}
 
-  findAll(): Promise<ProductEntity[]> {
+  async findAll(): Promise<ProductEntity[]> {
     return this.productRepository.find();
   }
 
-  findById(id: number): Promise<ProductEntity> {
+  async findById(id: number): Promise<ProductEntity> {
     return this.productRepository.findOneOrFail(id);
   }
 
-  create(product: ProductInput) {
+  async create(product: ProductInput) {
     return this.productRepository.save(product);
   }
 
