@@ -1,15 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CommonCrudService } from 'src/common/commonCrud.service';
+import { CommonCrudService } from '../common/commonCrud.service';
 import { Repository } from 'typeorm';
-import CategoryEntity from './entities/category.entity';
+import { CategoryEntity } from './entities/category.entity';
+import { FileUpload } from 'graphql-upload';
+import { ImageService } from 'src/image/image.service';
 
 @Injectable()
 export class CategoryService extends CommonCrudService<CategoryEntity> {
   constructor(
     @InjectRepository(CategoryEntity)
     private categoryRepository: Repository<CategoryEntity>,
+    private imageService: ImageService,
   ) {
     super(categoryRepository);
+  }
+
+  async addImage(id: number, image: FileUpload) {
+    const category = await this.categoryRepository.findOneOrFail(id);
+    const imageName = await this.imageService.saveUploadedFile(
+      image,
+      id,
+      'category',
+    );
+    category.pictureName = imageName;
+    return await this.categoryRepository.save(category);
+  }
+
+  async deleteImage(id: number) {
+    const category = await this.categoryRepository.findOneOrFail(id);
+    const imageName = category.pictureName;
+    this.imageService.deleteImageFile('category', id, imageName);
+    category.pictureName = null;
+    return await this.categoryRepository.save(category);
   }
 }

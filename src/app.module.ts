@@ -7,10 +7,12 @@ import { CategoryModule } from './category/category.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { OrderModule } from './order/order.module';
+import { ImageModule } from './image/image.module';
+import configuration from './configuration/default';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true, load: [configuration] }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
@@ -23,6 +25,7 @@ import { OrderModule } from './order/order.module';
     UserModule,
     AuthModule,
     OrderModule,
+    ImageModule,
   ],
   controllers: [],
   providers: [],
