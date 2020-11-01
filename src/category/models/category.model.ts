@@ -1,30 +1,19 @@
-// input InputCategory {
-//     name: String!
-//     description: String
-//     enabled: Boolean
-//     parentCategory: ID
-//   }
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
-//   type Query {
-//     categories: [Category]
-//     category(id: ID!): Category
-//   }
+@ObjectType()
+export class Category {
+  @Field(type => ID, { nullable: true })
+  id: number;
 
-//   type Mutation {
-//     addCategory(category: InputCategory!): Category
-//     updateCategory(id: ID!, category: InputCategory!): Category
-//     deleteCategory(id: ID!): Int
-//     addCategoryImage(id: ID!, image: Upload!): Category
-//     deleteCategoryImage(id: ID!): Category
-//   }
+  @Field()
+  name: string;
 
-//   type Category {
-//     id: ID
-//     name: String!
-//     description: String
-//     pictureName: String
-//     enabled: Boolean
-//     parentCategory: ID
-//     childCategories: [Category]
-//     products: [Product]
-//   }
+  @Field({ nullable: true })
+  description: string;
+
+  @Field({ nullable: true })
+  pictureName: string;
+
+  @Field({ defaultValue: true })
+  enabled: boolean;
+}

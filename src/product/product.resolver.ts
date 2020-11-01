@@ -1,13 +1,11 @@
 import { Args, ID, Mutation, Parent, Query, Resolver } from '@nestjs/graphql';
 import { Product } from './models/product.model';
-import { ProductInput } from './models/productInput.input';
+import { ProductInput } from './models/product.input';
 import { ProductService } from './product.service';
 
 @Resolver(of => Product)
 export class ProductResolver {
-  constructor(
-    private productService: ProductService, // private categorytService: CategorytService,
-  ) {}
+  constructor(private productService: ProductService) {}
 
   @Query(returns => Product)
   async product(@Args('id', { type: () => ID }) id: number) {

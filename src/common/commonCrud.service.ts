@@ -1,6 +1,6 @@
 import { BaseEntity, DeepPartial, Repository } from 'typeorm';
 
-export abstract class CommonService<T extends BaseEntity> {
+export abstract class CommonCrudService<T extends BaseEntity> {
   constructor(private repository: Repository<T>) {}
 
   async findAll(): Promise<T[]> {
