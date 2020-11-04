@@ -16,6 +16,16 @@ export class CategoryService extends CommonCrudService<CategoryEntity> {
     super(categoryRepository);
   }
 
+  async remove(id: number) {
+    const removedCategory = await super.remove(id);
+    this.imageService.deleteImageFile(
+      'category',
+      id,
+      removedCategory.pictureName,
+    );
+    return removedCategory;
+  }
+
   async addImage(id: number, image: FileUpload) {
     const category = await this.categoryRepository.findOneOrFail(id);
     const imageName = await this.imageService.saveUploadedFile(
