@@ -14,7 +14,7 @@ export class ProductEntity extends BaseEntity {
   @Column({ nullable: false, unique: true })
   name: string;
 
-  @Column({ nullable: true })
+  @Column('text', { nullable: true })
   description: string;
 
   @Column({ nullable: false, default: 0 })
@@ -29,7 +29,7 @@ export class ProductEntity extends BaseEntity {
   @Column({ nullable: false, default: true })
   enabled: boolean;
 
-  @Column('simple-array', { nullable: true })
+  @Column('text', { nullable: true })
   picturesNames: string[];
 
   costOfServing: number;
