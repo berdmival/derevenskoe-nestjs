@@ -1,4 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ProductEntity } from 'src/product/entities/product.entity';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'Categories' })
 export class CategoryEntity extends BaseEntity {
@@ -16,4 +24,22 @@ export class CategoryEntity extends BaseEntity {
 
   @Column({ nullable: false, default: true })
   enabled: boolean;
+
+  @ManyToOne(
+    type => CategoryEntity,
+    category => category.childCategories,
+  )
+  parentCategory: CategoryEntity;
+
+  @OneToMany(
+    type => CategoryEntity,
+    category => category.parentCategory,
+  )
+  childCategories: CategoryEntity[];
+
+  @OneToMany(
+    type => ProductEntity,
+    product => product.category,
+  )
+  products: ProductEntity[];
 }

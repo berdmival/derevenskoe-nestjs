@@ -19,7 +19,10 @@ import configuration from './configuration/default';
       entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
       synchronize: true, // TODO: remove this in production
     }),
-    GraphQLModule.forRoot({ autoSchemaFile: true }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+      context: ({ req, res, ...ctx }) => ({ req, res, ...ctx }),
+    }),
     ProductModule,
     CategoryModule,
     UserModule,

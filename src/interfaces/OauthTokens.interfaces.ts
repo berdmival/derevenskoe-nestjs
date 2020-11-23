@@ -5,7 +5,7 @@ export interface OauthTokensUserGroup {
   [key: string]: OauthTokensDeviceGroup;
 }
 export interface OauthTokensDeviceGroup {
-  access: string;
+  access?: string;
   [key: string]: string;
 }
 export interface OauthTokens {
@@ -27,4 +27,18 @@ export interface RefreshUser {
 export interface RefreshTokenPayload {
   access: string;
   user: RefreshUser;
+}
+
+export interface AuthData {
+  access: string;
+  refreshId: string;
+  userUID: string;
+  userId: number;
+  error?: number;
+}
+
+export interface LogoutOptions {
+  all: boolean;
+  userUID?: string;
+  userId?: number;
 }

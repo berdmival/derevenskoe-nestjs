@@ -1,9 +1,11 @@
+import { CategoryEntity } from 'src/category/entities/category.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   AfterLoad,
   BaseEntity,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity({ name: 'Products' })
@@ -31,6 +33,12 @@ export class ProductEntity extends BaseEntity {
 
   @Column('text', { nullable: true })
   picturesNames: string[];
+
+  @ManyToOne(
+    type => CategoryEntity,
+    category => category.products,
+  )
+  category: CategoryEntity;
 
   costOfServing: number;
 

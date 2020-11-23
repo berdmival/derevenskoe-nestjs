@@ -22,7 +22,4 @@ export class ProductInput {
 
   @Field({ defaultValue: true })
   enabled: boolean;
-
-  @Field(type => ID, { nullable: true })
-  category: number;
 }

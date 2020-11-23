@@ -18,9 +18,14 @@ export class ProductService extends CommonCrudService<ProductEntity> {
 
   async remove(id: number) {
     const removedProduct = await super.remove(id);
-    removedProduct.picturesNames.forEach(pictureName => {
-      this.imageService.deleteImageFile('product', id, pictureName);
-    });
+    if (
+      removedProduct.picturesNames &&
+      removedProduct.picturesNames.length > 0
+    ) {
+      removedProduct.picturesNames.forEach(pictureName => {
+        this.imageService.deleteImageFile('product', id, pictureName);
+      });
+    }
     return removedProduct;
   }
 

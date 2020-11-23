@@ -18,11 +18,13 @@ export class CategoryService extends CommonCrudService<CategoryEntity> {
 
   async remove(id: number) {
     const removedCategory = await super.remove(id);
-    this.imageService.deleteImageFile(
-      'category',
-      id,
-      removedCategory.pictureName,
-    );
+    if (removedCategory.pictureName) {
+      this.imageService.deleteImageFile(
+        'category',
+        id,
+        removedCategory.pictureName,
+      );
+    }
     return removedCategory;
   }
 
