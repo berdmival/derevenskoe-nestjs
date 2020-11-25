@@ -13,7 +13,7 @@ export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, unique: true, default: `user${Date.now()}` })
+  @Column({ nullable: true, unique: true })
   name: string;
 
   @Column({ nullable: false, unique: true })
@@ -40,7 +40,7 @@ export class UserEntity extends BaseEntity {
   @Column({ nullable: false, default: true })
   enabled: boolean;
 
-  @ManyToMany(() => RoleEntity)
+  @ManyToMany(() => RoleEntity, { eager: true })
   @JoinTable()
   roles: RoleEntity[];
 }

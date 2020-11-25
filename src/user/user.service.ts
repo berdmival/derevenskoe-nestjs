@@ -28,22 +28,30 @@ export class UserService extends CommonCrudService<UserEntity> {
   }
 
   async create(user: UserInput) {
-    const userRole = await this.roleRepository
-      .createQueryBuilder('role')
-      .insert()
-      .values({ name: this.configService.get<string>('security.roles.user') })
-      .onConflict('("name")')
-      .select()
-      .where('role.name = :name', {
+    let userRole: RoleEntity;
+    try {
+      userRole = await this.roleRepository.findOneOrFail({
         name: this.configService.get<string>('security.roles.user'),
-      })
-      .getOne();
+      });
+    } catch (err) {
+      userRole = await this.roleRepository.save({
+        name: this.configService.get<string>('security.roles.user'),
+      });
+    }
+
+    if (!user.name) {
+      user.name = `user${Date.now()}`;
+    }
+
     if (!user.roles) {
       user.roles = [];
     }
+
     user.roles.push(userRole);
+
     const salt = parseInt(<string>process.env.USER_SALT);
     user.password = await bcrypt.hash(user.password, salt);
+
     return super.create(user);
   }
 
