@@ -36,15 +36,15 @@ export class UserResolver {
     return await this.userService.remove(id);
   }
 
-  // @Mutation(returns => User)
-  // async createRole(@Args('id', { type: () => ID }) id: number) {
-  //   return await this.userService.remove(id);
-  // }
+  @Mutation(returns => User)
+  async assignAdminRole(@Args('id', { type: () => ID }) id: number) {
+    return await this.userService.assignAdminRole(id);
+  }
 
-  // @Mutation(returns => User)
-  // async addRoleToUser(@Args('id', { type: () => ID }) id: number) {
-  //   return await this.userService.remove(id);
-  // }
+  @Mutation(returns => User)
+  async revokeAdminRole(@Args('id', { type: () => ID }) id: number) {
+    return await this.userService.revokeAdminRole(id);
+  }
 
   @Mutation(returns => User)
   async addUserImage(

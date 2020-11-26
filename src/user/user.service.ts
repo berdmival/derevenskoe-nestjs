@@ -28,16 +28,9 @@ export class UserService extends CommonCrudService<UserEntity> {
   }
 
   async create(user: UserInput) {
-    let userRole: RoleEntity;
-    try {
-      userRole = await this.roleRepository.findOneOrFail({
-        name: this.configService.get<string>('security.roles.user'),
-      });
-    } catch (err) {
-      userRole = await this.roleRepository.save({
-        name: this.configService.get<string>('security.roles.user'),
-      });
-    }
+    const userRole: RoleEntity = await this.findOrCreateRole(
+      this.configService.get<string>('security.roles.user'),
+    );
 
     if (!user.name) {
       user.name = `user${Date.now()}`;
@@ -80,5 +73,51 @@ export class UserService extends CommonCrudService<UserEntity> {
     this.imageService.deleteImageFile('user', id, imageName);
     user.pictureName = null;
     return await this.userRepository.save(user);
+  }
+
+  async assignAdminRole(id: number) {
+    const user = await this.userRepository.findOneOrFail(id);
+    const adminRole: RoleEntity = await this.findOrCreateRole(
+      this.configService.get<string>('security.roles.admin'),
+    );
+
+    if (!user.roles) {
+      user.roles = [];
+    }
+
+    user.roles.push(adminRole);
+
+    this.userRepository.save(user);
+  }
+
+  async revokeAdminRole(id: number) {
+    const user = await this.userRepository.findOneOrFail(id);
+    const adminRole: RoleEntity = await this.findOrCreateRole(
+      this.configService.get<string>('security.roles.admin'),
+    );
+
+    if (!user.roles) {
+      return user;
+    }
+
+    user.roles = user.roles.filter(role => role.id === adminRole.id);
+
+    this.userRepository.save(user);
+  }
+
+  private async findOrCreateRole(roleName: string) {
+    let role: RoleEntity;
+
+    role = await this.roleRepository.findOne({
+      name: roleName,
+    });
+
+    if (!role) {
+      role = await this.roleRepository.save({
+        name: roleName,
+      });
+    }
+
+    return role;
   }
 }
