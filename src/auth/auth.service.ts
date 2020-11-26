@@ -43,9 +43,8 @@ export class AuthService {
       return {
         error: 401,
         access: null,
-        refreshId: null,
+        refresh: null,
         userUID: null,
-        userId: null,
       };
     }
 
@@ -53,9 +52,8 @@ export class AuthService {
       return {
         error: 404,
         access: null,
-        refreshId: null,
+        refresh: null,
         userUID: null,
-        userId: null,
       };
     }
 
@@ -68,21 +66,19 @@ export class AuthService {
       return {
         error: 401,
         access: null,
-        refreshId: null,
+        refresh: null,
         userUID: null,
-        userId: null,
       };
 
-    const { access, refreshId } = await this.tokenService.createTokens(
+    const { access, refresh } = await this.tokenService.createTokens(
       user,
       authenticationData.userUID,
     );
 
     return {
       access,
-      refreshId,
+      refresh,
       userUID: authenticationData.userUID,
-      userId: user.id,
     };
   }
 
@@ -148,7 +144,7 @@ export class AuthService {
         return {
           result: true,
           access: newTokens.access,
-          refresh: newTokens.refreshId,
+          refresh: newTokens.refresh,
           userUID,
         };
       } else {
@@ -178,9 +174,12 @@ export class AuthService {
       await this.tokenService.invalidateAll(logoutOptions.userUID);
     } else if (logoutOptions.userUID) {
       await this.tokenService.invalidateOne(logoutOptions.userUID);
-    } else {
+    } else if (logoutOptions.userId) {
       await this.tokenService.invalidateById(logoutOptions.userId);
+    } else {
+      return false;
     }
+    return true;
   }
 
   getCookiesConfiguration() {
@@ -206,7 +205,7 @@ export class AuthService {
     };
   }
 
-  private getCredentialsFromRequest(req: Request) {
+  getCredentialsFromRequest(req: Request): AuthData {
     const userUID: string = req.signedCookies
       ? req.signedCookies[this.USERUID_COOKIE]
       : null;

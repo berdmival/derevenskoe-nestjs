@@ -152,8 +152,8 @@ export class TokenService {
     };
 
     const access = await this.createAccess(user, userUID);
-    const refreshId = await this.createRefresh(access, user, userUID);
-    return { access, refreshId };
+    const refresh = await this.createRefresh(access, user, userUID);
+    return { access, refresh };
   }
 
   private getFormattedRoles = (user: any): string[] => {

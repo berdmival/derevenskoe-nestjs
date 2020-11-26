@@ -3,9 +3,6 @@ import { CategoryService } from './category.service';
 import { CategoryInput } from './models/category.input';
 import { Category } from './models/category.model';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
-import { UseGuards } from '@nestjs/common';
-import { PasswordAuthGuard } from 'src/auth/guards/password.guard';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 
 @Resolver(of => Category)
 export class CategoryResolver {
@@ -22,7 +19,6 @@ export class CategoryResolver {
   }
 
   @Mutation(returns => Category)
-  @UseGuards(JwtAuthGuard)
   async addCategory(@Args('category') category: CategoryInput) {
     return await this.categoryService.create(category);
   }

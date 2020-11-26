@@ -31,9 +31,8 @@ export interface RefreshTokenPayload {
 
 export interface AuthData {
   access: string;
-  refreshId: string;
+  refresh: string;
   userUID: string;
-  userId: number;
   error?: number;
 }
 
