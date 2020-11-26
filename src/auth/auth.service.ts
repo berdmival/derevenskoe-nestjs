@@ -170,12 +170,12 @@ export class AuthService {
    */
 
   async logout(logoutOptions: LogoutOptions) {
-    if (logoutOptions.all) {
+    if (!!logoutOptions.all && !!logoutOptions.userUID) {
       await this.tokenService.invalidateAll(logoutOptions.userUID);
-    } else if (logoutOptions.userUID) {
-      await this.tokenService.invalidateOne(logoutOptions.userUID);
-    } else if (logoutOptions.userId) {
+    } else if (!!logoutOptions.all && !!logoutOptions.userId) {
       await this.tokenService.invalidateById(logoutOptions.userId);
+    } else if (!logoutOptions.all && !!logoutOptions.userUID) {
+      await this.tokenService.invalidateOne(logoutOptions.userUID);
     } else {
       return false;
     }

@@ -9,6 +9,7 @@ import { RoleEntity } from './entities/role.entity';
 import { ConfigService } from '@nestjs/config';
 import { UserInput } from './models/user.input';
 import * as bcrypt from 'bcrypt';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UserService extends CommonCrudService<UserEntity> {
@@ -18,6 +19,7 @@ export class UserService extends CommonCrudService<UserEntity> {
     @InjectRepository(RoleEntity)
     private roleRepository: Repository<RoleEntity>,
     private imageService: ImageService,
+    private authService: AuthService,
     private configService: ConfigService,
   ) {
     super(userRepository);
@@ -87,7 +89,9 @@ export class UserService extends CommonCrudService<UserEntity> {
 
     user.roles.push(adminRole);
 
-    this.userRepository.save(user);
+    await this.authService.logout({ all: true, userId: user.id });
+
+    return await this.userRepository.save(user);
   }
 
   async revokeAdminRole(id: number) {
@@ -102,7 +106,9 @@ export class UserService extends CommonCrudService<UserEntity> {
 
     user.roles = user.roles.filter(role => role.id === adminRole.id);
 
-    this.userRepository.save(user);
+    await this.authService.logout({ all: true, userId: user.id });
+
+    return await this.userRepository.save(user);
   }
 
   private async findOrCreateRole(roleName: string) {
