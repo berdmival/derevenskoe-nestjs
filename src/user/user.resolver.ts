@@ -2,6 +2,7 @@ import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserInput } from './models/user.input';
 import { User } from './models/user.model';
 import { UserService } from './user.service';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver()
 export class UserResolver {
@@ -45,19 +46,16 @@ export class UserResolver {
   //   return await this.userService.remove(id);
   // }
 
-  // @Mutation(returns => Product)
-  // async addUserImages(
-  //   @Args('id', { type: () => ID }) id: number,
-  //   @Args('images', { type: () => [GraphQLUpload] }) images: FileUpload[],
-  // ) {
-  //   return await this.productService.addImages(id, images);
-  // }
+  @Mutation(returns => User)
+  async addUserImage(
+    @Args('id', { type: () => ID }) id: number,
+    @Args('image', { type: () => GraphQLUpload }) image: FileUpload,
+  ) {
+    return await this.userService.addImage(id, image);
+  }
 
-  // @Mutation(returns => Product)
-  // async deleteUserImage(
-  //   @Args('id', { type: () => ID }) id: number,
-  //   @Args('imageName') imageName: string,
-  // ) {
-  //   return await this.productService.deleteImage(id, imageName);
-  // }
+  @Mutation(returns => User)
+  async deleteUserImage(@Args('id', { type: () => ID }) id: number) {
+    return await this.userService.deleteImage(id);
+  }
 }
