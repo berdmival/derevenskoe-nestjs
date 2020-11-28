@@ -1,6 +1,5 @@
-import { Req, UseGuards } from '@nestjs/common';
+import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Request } from 'express';
 import { GetCredentials } from './decorators/credentials.decorator';
 import { AuthData } from '../interfaces';
 import { JwtAuthGuard } from './guards/jwt.guard';
@@ -19,8 +18,11 @@ export class AuthResolver {
 
   @Mutation(returns => Boolean)
   @UseGuards(JwtAuthGuard)
-  async logout(@Args('all') all: boolean, @Req() req: Request) {
-    const { userUID } = this.authService.getCredentialsFromRequest(req);
+  async logout(
+    @Args('all') all: boolean,
+    @GetCredentials() credentials: AuthData,
+  ) {
+    const { userUID } = credentials;
     if (!all && !userUID) {
       return false;
     } else {

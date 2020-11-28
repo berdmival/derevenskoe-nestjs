@@ -39,7 +39,7 @@ export class AuthService {
     let user;
 
     if (authenticationData.login) {
-      user = await this.userService.findOne(authenticationData.login);
+      user = await this.userService.findOneByLogin(authenticationData.login);
     } else {
       return {
         error: 401,
@@ -84,7 +84,7 @@ export class AuthService {
   }
 
   async verifyAccess(req: Request, allowedRoles?: string[]) {
-    const { access, userUID } = this.getCredentialsFromRequest(req);
+    const { access, refresh, userUID } = this.getCredentialsFromRequest(req);
 
     if (access && userUID) {
       try {
@@ -113,7 +113,13 @@ export class AuthService {
         }
 
         if (allowAccess) {
-          return { result: true, payload: userFindings, access, userUID };
+          return {
+            result: true,
+            payload: userFindings,
+            access,
+            refresh,
+            userUID,
+          };
         } else {
           return { result: false, error: 403, message: 'Access denied' };
         }
@@ -121,6 +127,31 @@ export class AuthService {
         //TokenExpiredError
         //JsonWebTokenError
         //NotBeforeError
+
+        if (error.name === 'TokenExpiredError') {
+          const newTokens = await this.tokenService.refreshTokens(
+            access,
+            refresh,
+            userUID,
+          );
+          if (newTokens) {
+            const newUserFindings = await this.tokenService.checkAccessToken(
+              newTokens.access,
+              userUID,
+            );
+
+            return {
+              result: true,
+              payload: newUserFindings,
+              access: newTokens.access,
+              refresh: newTokens.refresh,
+              userUID,
+            };
+          } else {
+            return { result: false, error: 403, message: 'Access denied' };
+          }
+        }
+
         return { result: false, error: error.name, message: error.message };
       }
     } else {
@@ -215,6 +246,24 @@ export class AuthService {
       ? req.signedCookies[this.REFRESH_COOKIE]
       : null;
     return { access, refresh, userUID };
+  }
+
+  setCredentialsToResponse(res, authResult: AuthData) {
+    if (!!authResult.userUID && !!authResult.access && !!authResult.refresh) {
+      res.cookie(
+        this.REFRESH_COOKIE,
+        authResult.refresh,
+        this.getCookiesConfiguration(),
+      );
+      res.cookie(
+        this.USERUID_COOKIE,
+        authResult.userUID,
+        this.getCookiesConfiguration(),
+      );
+      res.header('Authorization', 'Bearer ' + authResult.access);
+    }
+
+    return res;
   }
 
   private getAuthenticationDataFromRequest(req: Request) {

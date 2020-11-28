@@ -26,7 +26,7 @@ export class UserService extends CommonCrudService<UserEntity> {
     super(userRepository);
   }
 
-  async findOne(login: string) {
+  async findOneByLogin(login: string) {
     return await this.userRepository.findOneOrFail({ phone: login });
   }
 
