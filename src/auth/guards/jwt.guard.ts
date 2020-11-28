@@ -23,6 +23,7 @@ export class JwtAuthGuard implements CanActivate {
         userUID: verifyAccessResult.userUID,
       };
       req['credentials'] = authData;
+      req['user'] = verifyAccessResult.payload;
       req.res = this.authService.setCredentialsToResponse(req.res, authData);
     }
 
