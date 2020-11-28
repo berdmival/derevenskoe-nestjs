@@ -20,9 +20,8 @@ export class AuthResolver {
   @UseGuards(JwtAuthGuard)
   async logout(
     @Args('all') all: boolean,
-    @GetCredentials() credentials: AuthData,
+    @GetCredentials('userUID') userUID: string,
   ) {
-    const { userUID } = credentials;
     if (!all && !userUID) {
       return false;
     } else {
