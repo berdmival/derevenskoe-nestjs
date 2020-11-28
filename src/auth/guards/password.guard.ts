@@ -20,7 +20,7 @@ export class PasswordAuthGuard implements CanActivate {
 
     req.res.cookie(
       this.authService.getCookiesNames().refresh,
-      authResult.refreshId,
+      authResult.refresh,
       cookieConfig,
     );
     req.res.cookie(
@@ -29,6 +29,6 @@ export class PasswordAuthGuard implements CanActivate {
       cookieConfig,
     );
     req.res.header('Authorization', 'Bearer ' + authResult.access);
-    return !!authResult.userId;
+    return !!authResult.userUID;
   }
 }

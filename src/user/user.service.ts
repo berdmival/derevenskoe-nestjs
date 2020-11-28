@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommonCrudService } from 'src/common/commonCrud.service';
 import { ImageService } from 'src/image/image.service';
@@ -19,6 +19,7 @@ export class UserService extends CommonCrudService<UserEntity> {
     @InjectRepository(RoleEntity)
     private roleRepository: Repository<RoleEntity>,
     private imageService: ImageService,
+    @Inject(forwardRef(() => AuthService))
     private authService: AuthService,
     private configService: ConfigService,
   ) {

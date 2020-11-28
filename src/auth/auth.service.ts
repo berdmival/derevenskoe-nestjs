@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import * as uuid from 'uuid';
 
@@ -14,6 +14,7 @@ export class AuthService {
   private USERUID_COOKIE: string;
 
   constructor(
+    @Inject(forwardRef(() => UserService))
     private userService: UserService,
     private configService: ConfigService,
     private tokenService: TokenService,
