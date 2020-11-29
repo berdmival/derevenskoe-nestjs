@@ -12,6 +12,7 @@ import { Request } from 'express';
 export class AuthService {
   private REFRESH_COOKIE: string;
   private USERUID_COOKIE: string;
+  private COOKIE_PATH: string;
 
   constructor(
     @Inject(forwardRef(() => UserService))
@@ -26,6 +27,10 @@ export class AuthService {
     this.USERUID_COOKIE = this.configService.get<string>(
       'security.cookie.userUID',
       'uuid',
+    );
+    this.COOKIE_PATH = configService.get<string>(
+      'security.cookie.path',
+      '/graphql',
     );
   }
 
@@ -196,8 +201,8 @@ export class AuthService {
   }
 
   /**
-   * For logout all devices you need enter current user's id or all:true and current user's uid
-   * For logout user only on current device enter only current user's uid
+   * For logout all devices you need enter all:true current user's id or and current user's uid
+   * For logout user only on current device enter all:false and current user's uid
    * @param logoutOptions
    */
 
@@ -217,7 +222,7 @@ export class AuthService {
   getCookiesConfiguration() {
     return {
       // domain: ".super.com",
-      path: this.configService.get<string>('security.cookie.path', '/graphql'),
+      path: this.COOKIE_PATH,
       httpOnly: true,
       secure: true,
       expires: new Date(
@@ -263,6 +268,12 @@ export class AuthService {
       res.header('Authorization', 'Bearer ' + authResult.access);
     }
 
+    return res;
+  }
+
+  clearCredentials(res) {
+    res.clearCookie(this.REFRESH_COOKIE, { path: this.COOKIE_PATH });
+    res.clearCookie(this.USERUID_COOKIE, { path: this.COOKIE_PATH });
     return res;
   }
 

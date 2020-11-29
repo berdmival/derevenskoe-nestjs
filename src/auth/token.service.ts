@@ -48,10 +48,10 @@ export class TokenService {
     const userId = this.tokens.indexes[userUID];
     if (
       userId &&
-      this.tokens.tokens[userId] &&
-      this.tokens.tokens[userId][userUID] &&
-      this.tokens.tokens[userId][userUID].access &&
-      this.tokens.tokens[userId][userUID].access === access
+      // this.tokens.tokens[userId] &&
+      // this.tokens.tokens[userId][userUID] &&
+      // this.tokens.tokens[userId][userUID].access &&
+      this.tokens.tokens?.[userId]?.[userUID]?.access === access
     ) {
       const userFindings = await this.jwtService.verifyAsync<
         AccessTokenPayload
@@ -67,9 +67,9 @@ export class TokenService {
     const userId = this.tokens.indexes[userUID];
     if (
       userId &&
-      this.tokens.tokens[userId] &&
-      this.tokens.tokens[userId][userUID] &&
-      this.tokens.tokens[userId][userUID][refresh]
+      // this.tokens.tokens[userId] &&
+      // this.tokens.tokens[userId][userUID] &&
+      this.tokens.tokens?.[userId]?.[userUID]?.[refresh]
     ) {
       try {
         const payloadFromRefresh = await this.jwtService.verifyAsync<
@@ -98,20 +98,22 @@ export class TokenService {
   }
 
   async invalidateOne(userUID: string) {
-    const userId = this.tokens.indexes[userUID];
-    delete this.tokens.tokens[userId][userUID];
-    delete this.tokens.indexes[userUID];
+    const userId = this.tokens.indexes?.[userUID];
+    delete this.tokens.tokens?.[userId]?.[userUID];
+    delete this.tokens.indexes?.[userUID];
   }
 
   async invalidateAll(userUID: string) {
-    const userId = this.tokens.indexes[userUID];
+    const userId = this.tokens.indexes?.[userUID];
     this.invalidateById(userId);
   }
 
   async invalidateById(userId: number) {
-    Object.keys(this.tokens.tokens[userId]).forEach(uuid =>
-      this.invalidateOne(uuid),
-    );
+    if (this.tokens.tokens?.[userId]) {
+      Object.keys(this.tokens.tokens[userId]).forEach(uuid =>
+        this.invalidateOne(uuid),
+      );
+    }
   }
 
   private async createRefresh(
@@ -147,7 +149,7 @@ export class TokenService {
   async createTokens(user: UserEntity | RefreshUser, userUID: string) {
     this.tokens.indexes[userUID] = user.id;
     this.tokens.tokens[user.id] = {
-      ...this.tokens.tokens[user.id],
+      ...this.tokens.tokens?.[user.id],
       [userUID]: {},
     };
 

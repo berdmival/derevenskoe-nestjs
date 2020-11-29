@@ -24,7 +24,12 @@ export class JwtAuthGuard implements CanActivate {
       };
       req['credentials'] = authData;
       req['user'] = verifyAccessResult.payload;
-      req.res = this.authService.setCredentialsToResponse(req.res, authData);
+
+      if (context.getHandler().name === 'logout') {
+        req.res = this.authService.clearCredentials(req.res);
+      } else {
+        req.res = this.authService.setCredentialsToResponse(req.res, authData);
+      }
     }
 
     return verifyAccessResult.result;

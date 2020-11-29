@@ -5,6 +5,7 @@ import { AuthData } from '../interfaces';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { PasswordAuthGuard } from './guards/password.guard';
 import { AuthService } from './auth.service';
+import { GetUserPayload } from './decorators/user.decorator';
 
 @Resolver()
 export class AuthResolver {
@@ -21,11 +22,16 @@ export class AuthResolver {
   async logout(
     @Args('all') all: boolean,
     @GetCredentials('userUID') userUID: string,
+    @GetUserPayload('userId') userId: number,
   ) {
+    if (!userUID && !!userId) {
+      return await this.authService.logout({ all: true, userId });
+    }
+
     if (!all && !userUID) {
       return false;
-    } else {
-      return this.authService.logout({ all, userUID });
     }
+
+    return await this.authService.logout({ all, userUID });
   }
 }

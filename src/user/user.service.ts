@@ -105,7 +105,7 @@ export class UserService extends CommonCrudService<UserEntity> {
       return user;
     }
 
-    user.roles = user.roles.filter(role => role.id === adminRole.id);
+    user.roles = user.roles.filter(role => role.id !== adminRole.id);
 
     await this.authService.logout({ all: true, userId: user.id });
 
