@@ -99,21 +99,27 @@ export class TokenService {
 
   async invalidateOne(userUID: string) {
     const userId = this.tokens.indexes?.[userUID];
-    delete this.tokens.tokens?.[userId]?.[userUID];
-    delete this.tokens.indexes?.[userUID];
+    const isTokensDeleted = delete this.tokens.tokens?.[userId]?.[userUID];
+    const isIndexesDeleted = delete this.tokens.indexes?.[userUID];
+    return isTokensDeleted || isIndexesDeleted;
   }
 
   async invalidateAll(userUID: string) {
     const userId = this.tokens.indexes?.[userUID];
-    this.invalidateById(userId);
+    return await this.invalidateById(userId);
   }
 
   async invalidateById(userId: number) {
+    let success = false;
     if (this.tokens.tokens?.[userId]) {
-      for (const uuid in this.tokens.tokens[userId]) {
-        this.invalidateOne(uuid);
-      }
+      Object.keys(this.tokens.tokens[userId]).forEach(async uuid => {
+        const isCurrentUuidInvalidating = await this.invalidateOne(uuid);
+        if (isCurrentUuidInvalidating) {
+          success = true;
+        }
+      });
     }
+    return success;
   }
 
   private async createRefresh(
