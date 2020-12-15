@@ -110,9 +110,9 @@ export class TokenService {
 
   async invalidateById(userId: number) {
     if (this.tokens.tokens?.[userId]) {
-      Object.keys(this.tokens.tokens[userId]).forEach(uuid =>
-        this.invalidateOne(uuid),
-      );
+      for (const uuid in this.tokens.tokens[userId]) {
+        this.invalidateOne(uuid);
+      }
     }
   }
 

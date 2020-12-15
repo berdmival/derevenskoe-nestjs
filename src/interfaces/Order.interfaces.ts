@@ -1,7 +1,7 @@
 export interface OrdersAddress {
   coordinates: string;
   formatted: string;
-  UserId?: number;
+  userId?: number;
 }
 
 export interface OrdersServing {
