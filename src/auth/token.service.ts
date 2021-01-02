@@ -53,11 +53,9 @@ export class TokenService {
       // this.tokens.tokens[userId][userUID].access &&
       this.tokens.tokens?.[userId]?.[userUID]?.access === access
     ) {
-      const userFindings = await this.jwtService.verifyAsync<
+      return await this.jwtService.verifyAsync<
         AccessTokenPayload
       >(access, { secret: <string>process.env.TOKEN_SECRET });
-
-      return userFindings;
     } else {
       return null;
     }
