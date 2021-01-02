@@ -30,12 +30,11 @@ export class CategoryService extends CommonCrudService<CategoryEntity> {
 
   async addImage(id: number, image: FileUpload) {
     const category = await this.categoryRepository.findOneOrFail(id);
-    const imageName = await this.imageService.saveUploadedFile(
+    category.pictureName = await this.imageService.saveUploadedFile(
       image,
       id,
       'category',
     );
-    category.pictureName = imageName;
     return await this.categoryRepository.save(category);
   }
 

@@ -61,12 +61,11 @@ export class UserService extends CommonCrudService<UserEntity> {
 
   async addImage(id: number, image: FileUpload) {
     const user = await this.userRepository.findOneOrFail(id);
-    const imageName = await this.imageService.saveUploadedFile(
+    user.pictureName = await this.imageService.saveUploadedFile(
       image,
       id,
       'user',
     );
-    user.pictureName = imageName;
     return await this.userRepository.save(user);
   }
 

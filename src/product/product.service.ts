@@ -31,13 +31,12 @@ export class ProductService extends CommonCrudService<ProductEntity> {
 
   async addImages(id: number, images: FileUpload[]) {
     const product = await this.productRepository.findOneOrFail(id);
-    const imagesNames = await this.imageService.saveSomeImages(
+    product.picturesNames = await this.imageService.saveSomeImages(
       images,
       product.picturesNames || [],
       id,
       'product',
     );
-    product.picturesNames = imagesNames;
     return await this.productRepository.save(product);
   }
 
