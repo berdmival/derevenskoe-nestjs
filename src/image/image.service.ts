@@ -4,52 +4,9 @@ import { createWriteStream, mkdir, ReadStream, unlink } from 'fs';
 import * as path from 'path';
 import { FileUpload } from 'graphql-upload';
 import * as uuid from 'uuid';
-// import sharp from 'sharp';
+import sharp from 'sharp';
 
-// import { ImageConfig, ImageResizerOptions } from '../interfaces';
-
-// export const resizer = async (options: ImageResizerOptions) => {
-//   const { type, id, name, size } = options;
-
-//   let UPLOAD_TYPE_DIR: 'small' | 'medium' | 'large';
-
-//   if (!type || !id || !name || !size) {
-//     return null;
-//   } else {
-//     UPLOAD_TYPE_DIR = config.get(`files.upload.type.${type}`);
-//     if (!UPLOAD_TYPE_DIR) return null;
-//   }
-
-//   const UPLOAD_COMMON_DIR: string =
-//     config.get('files.upload.type.main') || 'upload';
-
-//   const imagePath = path.join(UPLOAD_COMMON_DIR, UPLOAD_TYPE_DIR, id, name);
-
-//   const imageConfig: ImageConfig =
-//     config.get(`files.upload.image.size.${size}`) || {};
-
-//   const image = sharp(imagePath);
-//   let metadata = await image.metadata();
-
-//   if (imageConfig.width && imageConfig.height) {
-//     image.resize(imageConfig.width, imageConfig.height, {
-//       fit: 'inside',
-//       withoutEnlargement: !imageConfig.upsize,
-//     });
-//   }
-
-//   if (
-//     imageConfig.output &&
-//     metadata.format &&
-//     imageConfig.types?.includes(metadata.format)
-//   ) {
-//     image.toFormat(imageConfig.output, { quality: imageConfig.quality });
-//   }
-
-//   //TODO: composite image with watermarks
-
-//   return image.withMetadata();
-// };
+import { ImageConfig, ImageResizerOptions } from '../interfaces';
 
 @Injectable()
 export class ImageService {
@@ -148,4 +105,47 @@ export class ImageService {
     }
     return existingNames;
   }
+
+  resizer = async (options: ImageResizerOptions) => {
+    const { type, id, name, size } = options;
+
+    let UPLOAD_TYPE_DIR: 'small' | 'medium' | 'large';
+
+    if (!type || !id || !name || !size) {
+      return null;
+    } else {
+      UPLOAD_TYPE_DIR = this.configService.get(`files.upload.type.${type}`);
+      if (!UPLOAD_TYPE_DIR) return null;
+    }
+
+    const UPLOAD_COMMON_DIR: string =
+      this.configService.get<string>('files.upload.type.main') || 'upload';
+
+    const imagePath = path.join(UPLOAD_COMMON_DIR, UPLOAD_TYPE_DIR, id, name);
+
+    const imageConfig: ImageConfig =
+      this.configService.get(`files.upload.image.size.${size}`) || {};
+
+    const image = sharp(imagePath);
+    const metadata = await image.metadata();
+
+    if (imageConfig.width && imageConfig.height) {
+      image.resize(imageConfig.width, imageConfig.height, {
+        fit: 'inside',
+        withoutEnlargement: !imageConfig.upsize,
+      });
+    }
+
+    if (
+      imageConfig.output &&
+      metadata.format &&
+      imageConfig.types?.includes(metadata.format)
+    ) {
+      image.toFormat(imageConfig.output, { quality: imageConfig.quality });
+    }
+
+    //TODO: composite image with watermarks
+
+    return image.withMetadata();
+  };
 }

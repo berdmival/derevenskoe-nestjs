@@ -2,7 +2,7 @@ export interface ImageResizerOptions {
   type: string;
   id: string;
   name: string;
-  size: "small" | "medium" | "large";
+  size: 'small' | 'medium' | 'large';
 }
 
 export interface ImageConfig {
