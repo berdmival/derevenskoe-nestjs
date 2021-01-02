@@ -110,12 +110,12 @@ export class TokenService {
   async invalidateById(userId: number) {
     let success = false;
     if (this.tokens.tokens?.[userId]) {
-      Object.keys(this.tokens.tokens[userId]).forEach(async uuid => {
+      for (const uuid of Object.keys(this.tokens.tokens[userId])) {
         const isCurrentUuidInvalidating = await this.invalidateOne(uuid);
         if (isCurrentUuidInvalidating) {
           success = true;
         }
-      });
+      }
     }
     return success;
   }

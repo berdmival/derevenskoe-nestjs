@@ -10,9 +10,9 @@ import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
-  private REFRESH_COOKIE: string;
-  private USERUID_COOKIE: string;
-  private COOKIE_PATH: string;
+  private readonly REFRESH_COOKIE: string;
+  private readonly USERUID_COOKIE: string;
+  private readonly COOKIE_PATH: string;
 
   constructor(
     @Inject(forwardRef(() => UserService))

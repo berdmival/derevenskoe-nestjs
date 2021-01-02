@@ -1,4 +1,4 @@
-import { Args, ID, Mutation, Parent, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Product } from './models/product.model';
 import { ProductInput } from './models/product.input';
 import { ProductService } from './product.service';
