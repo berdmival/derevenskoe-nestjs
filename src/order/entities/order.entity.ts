@@ -1,4 +1,5 @@
 import {
+  AfterLoad,
   BaseEntity,
   Column,
   Entity,
@@ -35,6 +36,18 @@ export class OrderEntity extends BaseEntity {
     ops => ops.order,
   )
   servings: OrderProductServingEntity[];
-  // orderStatus: OrderStatusEntity;
-  // costOfOrder: string;
+
+  // orderStatus: OrderStatusEntity; // TODO order status
+
+  costOfOrder: number;
+
+  @AfterLoad()
+  countCostOfOrder() {
+    this.costOfOrder = Math.round(
+      this.servings.reduce(
+        (total, current) => total + current.costOfOrderProductServing,
+        0,
+      ),
+    );
+  }
 }

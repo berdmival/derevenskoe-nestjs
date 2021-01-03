@@ -1,4 +1,10 @@
-import { BaseEntity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  AfterLoad,
+  BaseEntity,
+  Column,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { OrderEntity } from './order.entity';
 import { ProductEntity } from '../../product/entities/product.entity';
 
@@ -20,4 +26,13 @@ export class OrderProductServingEntity extends BaseEntity {
     product => product.servings,
   )
   product: ProductEntity;
+
+  costOfOrderProductServing: number;
+
+  @AfterLoad()
+  countCostOfOrderProductServing() {
+    this.costOfOrderProductServing = Math.round(
+      this.product.costOfServing * this.count,
+    );
+  }
 }
