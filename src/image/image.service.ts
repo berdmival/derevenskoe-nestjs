@@ -4,13 +4,14 @@ import { createWriteStream, mkdir, ReadStream, unlink } from 'fs';
 import * as path from 'path';
 import { FileUpload } from 'graphql-upload';
 import * as uuid from 'uuid';
-import sharp from 'sharp';
+import * as sharp from 'sharp';
 
 import { ImageConfig, ImageResizerOptions } from '../interfaces';
 
 @Injectable()
 export class ImageService {
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService) {
+  }
 
   private saveFile(
     uploadedFileStream: ReadStream,
@@ -106,7 +107,7 @@ export class ImageService {
     return existingNames;
   }
 
-  resizer = async (options: ImageResizerOptions) => {
+  async resizer(options: ImageResizerOptions) {
     const { type, id, name, size } = options;
 
     let UPLOAD_TYPE_DIR: 'small' | 'medium' | 'large';
