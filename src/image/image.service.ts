@@ -10,8 +10,7 @@ import { ImageConfig, ImageResizerOptions } from '../interfaces';
 
 @Injectable()
 export class ImageService {
-  constructor(private configService: ConfigService) {
-  }
+  constructor(private readonly configService: ConfigService) {}
 
   private saveFile(
     uploadedFileStream: ReadStream,
@@ -148,5 +147,5 @@ export class ImageService {
     //TODO: composite image with watermarks
 
     return image.withMetadata();
-  };
+  }
 }

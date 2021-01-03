@@ -40,8 +40,8 @@ export class TokenService {
   private tokens: OauthTokens = { indexes: {}, tokens: {} };
 
   constructor(
-    private jwtService: JwtService,
-    private configService: ConfigService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async checkAccessToken(access: string, userUID: string) {

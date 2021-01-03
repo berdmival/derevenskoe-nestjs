@@ -10,8 +10,8 @@ import { ImageService } from 'src/image/image.service';
 export class CategoryService extends CommonCrudService<CategoryEntity> {
   constructor(
     @InjectRepository(CategoryEntity)
-    private categoryRepository: Repository<CategoryEntity>,
-    private imageService: ImageService,
+    private readonly categoryRepository: Repository<CategoryEntity>,
+    private readonly imageService: ImageService,
   ) {
     super(categoryRepository);
   }

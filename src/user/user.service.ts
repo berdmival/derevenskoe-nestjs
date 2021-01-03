@@ -15,13 +15,13 @@ import { AuthService } from 'src/auth/auth.service';
 export class UserService extends CommonCrudService<UserEntity> {
   constructor(
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private readonly userRepository: Repository<UserEntity>,
     @InjectRepository(RoleEntity)
-    private roleRepository: Repository<RoleEntity>,
-    private imageService: ImageService,
+    private readonly roleRepository: Repository<RoleEntity>,
+    private readonly imageService: ImageService,
     @Inject(forwardRef(() => AuthService))
-    private authService: AuthService,
-    private configService: ConfigService,
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
   ) {
     super(userRepository);
   }

@@ -6,7 +6,9 @@ import {
   AfterLoad,
   BaseEntity,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
+import { OrderProductServingEntity } from '../../order/entities/orderProductServing.entity';
 
 @Entity({ name: 'Products' })
 export class ProductEntity extends BaseEntity {
@@ -40,6 +42,12 @@ export class ProductEntity extends BaseEntity {
     { eager: true },
   )
   category: CategoryEntity;
+
+  @OneToMany(
+    type => OrderProductServingEntity,
+    ops => ops.product,
+  )
+  servings: OrderProductServingEntity[];
 
   costOfServing: number;
 

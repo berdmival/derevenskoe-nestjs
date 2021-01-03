@@ -4,9 +4,12 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { RoleEntity } from './role.entity';
+import { AddressEntity } from '../../order/entities/address.entity';
+import { OrderEntity } from '../../order/entities/order.entity';
 
 @Entity({ name: 'Users' })
 export class UserEntity extends BaseEntity {
@@ -43,4 +46,16 @@ export class UserEntity extends BaseEntity {
   @ManyToMany(() => RoleEntity, { eager: true })
   @JoinTable()
   roles: RoleEntity[];
+
+  @OneToMany(
+    type => AddressEntity,
+    address => address.user,
+  )
+  addresses: AddressEntity[];
+
+  @OneToMany(
+    type => OrderEntity,
+    order => order.user,
+  )
+  orders: OrderEntity[];
 }

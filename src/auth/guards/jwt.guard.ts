@@ -6,7 +6,10 @@ import { AuthService } from '../auth.service';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  constructor(private reflector: Reflector, private authService: AuthService) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly authService: AuthService,
+  ) {}
   async canActivate(context: ExecutionContext) {
     const { req } = GqlExecutionContext.create(context).getContext();
     const roles = this.reflector.getAllAndMerge<string[]>('role', [

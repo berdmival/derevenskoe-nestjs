@@ -10,8 +10,8 @@ import { FileUpload } from 'graphql-upload';
 export class ProductService extends CommonCrudService<ProductEntity> {
   constructor(
     @InjectRepository(ProductEntity)
-    private productRepository: Repository<ProductEntity>,
-    private imageService: ImageService,
+    private readonly productRepository: Repository<ProductEntity>,
+    private readonly imageService: ImageService,
   ) {
     super(productRepository);
   }

@@ -6,7 +6,7 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver(of => Category)
 export class CategoryResolver {
-  constructor(private categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) {}
 
   @Query(returns => [Category])
   async categories() {

@@ -1,7 +1,7 @@
 import { BaseEntity, DeepPartial, Repository } from 'typeorm';
 
 export abstract class CommonCrudService<T extends BaseEntity> {
-  protected constructor(private repository: Repository<T>) {}
+  protected constructor(private readonly repository: Repository<T>) {}
 
   async findAll(): Promise<T[]> {
     return this.repository.find();

@@ -16,9 +16,9 @@ export class AuthService {
 
   constructor(
     @Inject(forwardRef(() => UserService))
-    private userService: UserService,
-    private configService: ConfigService,
-    private tokenService: TokenService,
+    private readonly userService: UserService,
+    private readonly configService: ConfigService,
+    private readonly tokenService: TokenService,
   ) {
     this.REFRESH_COOKIE = this.configService.get<string>(
       'security.cookie.refresh',

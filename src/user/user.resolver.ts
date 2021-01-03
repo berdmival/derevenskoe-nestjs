@@ -6,7 +6,7 @@ import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver()
 export class UserResolver {
-  constructor(private userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   @Query(returns => [User])
   async users() {
