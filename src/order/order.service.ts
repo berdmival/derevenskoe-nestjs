@@ -4,11 +4,7 @@ import { OrderEntity } from './entities/order.entity';
 import { ConfigService } from '@nestjs/config';
 import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  OrdersAddress,
-  OrdersServing,
-  YandexGeocodeFeaturedItem,
-} from '../interfaces';
+import { OrdersAddress, YandexGeocodeFeaturedItem } from '../interfaces';
 import fetch from 'node-fetch';
 import { AddressEntity } from './entities/address.entity';
 import { UserService } from '../user/user.service';
