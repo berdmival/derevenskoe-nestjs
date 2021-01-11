@@ -22,7 +22,7 @@ export class AddressEntity extends BaseEntity {
   formatted: string;
 
   @ManyToMany(type => UserEntity)
-  user: UserEntity[];
+  users: UserEntity[];
 
   @OneToMany(
     type => OrderEntity,

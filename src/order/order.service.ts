@@ -8,6 +8,7 @@ import { OrdersAddress, YandexGeocodeFeaturedItem } from '../interfaces';
 import fetch from 'node-fetch';
 import { AddressEntity } from './entities/address.entity';
 import { UserService } from '../user/user.service';
+import { UserEntity } from '../user/entities/user.entity';
 
 @Injectable()
 export class OrderService extends CommonCrudService<OrderEntity> {
@@ -28,8 +29,10 @@ export class OrderService extends CommonCrudService<OrderEntity> {
       coordinates: order.address.coordinates,
     });
 
-    if (!order.address.user) {
-      order.address.user = order.user;
+    if (!order.address.users) {
+      order.address.users = [order.user];
+    } else if (!order.address.users.includes(order.user as UserEntity)) {
+      order.address.users.push(order.user as UserEntity);
     }
 
     order.date = Date.now();
