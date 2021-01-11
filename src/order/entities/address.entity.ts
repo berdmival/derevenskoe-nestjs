@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -20,11 +21,8 @@ export class AddressEntity extends BaseEntity {
   @Column({ nullable: true })
   formatted: string;
 
-  @ManyToOne(
-    type => UserEntity,
-    user => user.addresses,
-  )
-  user: UserEntity;
+  @ManyToMany(type => UserEntity)
+  user: UserEntity[];
 
   @OneToMany(
     type => OrderEntity,

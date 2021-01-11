@@ -47,10 +47,8 @@ export class UserEntity extends BaseEntity {
   @JoinTable()
   roles: RoleEntity[];
 
-  @OneToMany(
-    type => AddressEntity,
-    address => address.user,
-  )
+  @ManyToMany(type => AddressEntity)
+  @JoinTable()
   addresses: AddressEntity[];
 
   @OneToMany(
