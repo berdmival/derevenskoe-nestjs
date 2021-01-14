@@ -1,43 +1,48 @@
 export interface OauthTokensIndex {
-  [key: string]: number;
+    [key: string]: number;
 }
+
 export interface OauthTokensUserGroup {
-  [key: string]: OauthTokensDeviceGroup;
+    [key: string]: OauthTokensDeviceGroup;
 }
+
 export interface OauthTokensDeviceGroup {
-  access?: string;
-  [key: string]: string;
+    access?: string;
+
+    [key: string]: string;
 }
+
 export interface OauthTokens {
-  indexes: OauthTokensIndex;
-  tokens: {
-    [key: number]: OauthTokensUserGroup;
-  };
+    indexes: OauthTokensIndex;
+    tokens: {
+        [key: number]: OauthTokensUserGroup;
+    };
 }
+
 export interface AccessTokenPayload {
-  userId: number;
-  userRoles: string[];
+    userId: number;
+    userRoles: string[];
 }
 
 export interface RefreshUser {
-  id: number;
-  userRoles: string[];
+    id: number;
+    userRoles: string[];
 }
 
 export interface RefreshTokenPayload {
-  access: string;
-  user: RefreshUser;
+    access: string;
+    user: RefreshUser;
 }
 
 export interface AuthData {
-  access: string;
-  refresh: string;
-  userUID: string;
-  error?: number;
+    access: string;
+    refresh: string;
+    userUID: string;
+    error?: number;
 }
 
 export interface LogoutOptions {
-  all: boolean;
-  userUID?: string;
-  userId?: number;
+    all: boolean;
+    userUID?: string;
+    userId?: number;
 }

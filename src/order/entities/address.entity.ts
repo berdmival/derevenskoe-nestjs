@@ -1,31 +1,31 @@
 import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
+    BaseEntity,
+    Column,
+    Entity,
+    ManyToMany,
+    OneToMany,
+    PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserEntity } from '../../user/entities/user.entity';
-import { OrderEntity } from './order.entity';
+import {UserEntity} from '../../user/entities/user.entity';
+import {OrderEntity} from './order.entity';
 
-@Entity({ name: 'Addresses' })
+@Entity({name: 'Addresses'})
 export class AddressEntity extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column({ nullable: true })
-  coordinates: string;
+    @Column({nullable: true})
+    coordinates: string;
 
-  @Column({ nullable: true })
-  formatted: string;
+    @Column({nullable: true})
+    formatted: string;
 
-  @ManyToMany(type => UserEntity)
-  users: UserEntity[];
+    @ManyToMany(type => UserEntity)
+    users: UserEntity[];
 
-  @OneToMany(
-    type => OrderEntity,
-    order => order.address,
-  )
-  orders: OrderEntity[];
+    @OneToMany(
+        type => OrderEntity,
+        order => order.address,
+    )
+    orders: OrderEntity[];
 }

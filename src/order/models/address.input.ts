@@ -1,10 +1,10 @@
-import { Field, InputType } from '@nestjs/graphql';
+import {Field, InputType} from '@nestjs/graphql';
 
 @InputType()
 export class AddressInput {
-  @Field()
-  coordinates: string;
+    @Field()
+    coordinates: string;
 
-  @Field()
-  formatted: string;
+    @Field()
+    formatted: string;
 }

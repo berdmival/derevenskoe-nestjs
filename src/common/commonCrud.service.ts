@@ -1,27 +1,28 @@
-import { BaseEntity, DeepPartial, Repository } from 'typeorm';
+import {BaseEntity, DeepPartial, Repository} from 'typeorm';
 
 export abstract class CommonCrudService<T extends BaseEntity> {
-  protected constructor(private readonly repository: Repository<T>) {}
+    protected constructor(private readonly repository: Repository<T>) {
+    }
 
-  async findAll(): Promise<T[]> {
-    return this.repository.find();
-  }
+    async findAll(): Promise<T[]> {
+        return this.repository.find();
+    }
 
-  async findById(id: number): Promise<T> {
-    return this.repository.findOneOrFail(id);
-  }
+    async findById(id: number): Promise<T> {
+        return this.repository.findOneOrFail(id);
+    }
 
-  async create(item: DeepPartial<T>) {
-    return this.repository.save(item);
-  }
+    async create(item: DeepPartial<T>) {
+        return this.repository.save(item);
+    }
 
-  async update(id: number, item: DeepPartial<T>) {
-    const oldItem = await this.repository.findOneOrFail(id);
-    return this.repository.save({ ...oldItem, ...item });
-  }
+    async update(id: number, item: DeepPartial<T>) {
+        const oldItem = await this.repository.findOneOrFail(id);
+        return this.repository.save({...oldItem, ...item});
+    }
 
-  async remove(id: number) {
-    const item = await this.repository.findOneOrFail(id);
-    return this.repository.remove(item);
-  }
+    async remove(id: number) {
+        const item = await this.repository.findOneOrFail(id);
+        return this.repository.remove(item);
+    }
 }
