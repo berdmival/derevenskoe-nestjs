@@ -3,15 +3,16 @@ import {AppModule} from './app.module';
 import * as fs from 'fs';
 import * as cookieParser from 'cookie-parser';
 import * as helmet from 'helmet';
+import {HttpsOptions} from "@nestjs/common/interfaces/external/https-options.interface";
 
 async function bootstrap() {
     const SERVER_PORT = Number.parseInt(<string>process.env.PORT);
-    const SERVER_PFX = <string>process.env.HTTPS_PFX;
-    const SERVER_PASSPHRASE = <string>process.env.HTTPS_PASSPHRASE;
+    const HTTPS_CRT = <string>process.env.HTTPS_CRT;
+    const HTTPS_KEY = <string>process.env.HTTPS_KEY;
 
-    const httpsOptions = {
-        pfx: fs.readFileSync(SERVER_PFX),
-        passphrase: SERVER_PASSPHRASE,
+    const httpsOptions: HttpsOptions = {
+        cert: fs.readFileSync(HTTPS_CRT),
+        key: fs.readFileSync(HTTPS_KEY),
     };
 
     // TODO: security (helmet, cors etc.)
