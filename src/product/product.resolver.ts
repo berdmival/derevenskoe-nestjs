@@ -3,10 +3,16 @@ import {Product} from './models/product.model';
 import {ProductInput} from './models/product.input';
 import {ProductService} from './product.service';
 import {FileUpload, GraphQLUpload} from 'graphql-upload';
+import {CategoryService} from "../category/category.service";
+import {ProductEntity} from "./entities/product.entity";
+import {DeepPartial} from "typeorm";
 
 @Resolver(of => Product)
 export class ProductResolver {
-    constructor(private readonly productService: ProductService) {
+    constructor(
+        private readonly productService: ProductService,
+        private readonly categoryService: CategoryService
+    ) {
     }
 
     @Query(returns => Product)
@@ -20,7 +26,15 @@ export class ProductResolver {
     }
 
     @Mutation(returns => Product)
-    async addProduct(@Args('product') product: ProductInput) {
+    async addProduct(
+        @Args('product') product: ProductInput,
+        @Args('categoryId', {type: () => ID, nullable: true}) categoryId?: number
+    ) {
+        if(categoryId){
+            const productCategory = await this.categoryService.findById(categoryId);
+            const newProduct: DeepPartial<ProductEntity> = {...product, category: productCategory};
+            return await this.productService.create(newProduct);
+        }
         return await this.productService.create(product);
     }
 
@@ -28,7 +42,13 @@ export class ProductResolver {
     async updateProduct(
         @Args('id', {type: () => ID}) id: number,
         @Args('product') product: ProductInput,
+        @Args('categoryId', {type: () => ID, nullable: true}) categoryId?: number
     ) {
+        if(categoryId){
+            const productCategory = await this.categoryService.findById(categoryId);
+            const newProduct: DeepPartial<ProductEntity> = {...product, category: productCategory};
+            return await this.productService.update(id, newProduct);
+        }
         return await this.productService.update(id, product);
     }
 
