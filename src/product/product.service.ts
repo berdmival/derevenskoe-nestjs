@@ -27,7 +27,7 @@ export class ProductService extends CommonCrudService<ProductEntity> {
 
     async getProductsByCategory(categoryId: number) {
         const category = await this.categoryRepository.findOne({id: categoryId}, {relations: ['products']});
-        return category.products;
+        return category ? category.products : [];
     }
 
     async remove(id: number) {
