@@ -25,6 +25,11 @@ export class ProductResolver {
         return await this.productService.findAll();
     }
 
+    @Query(returns => [Product])
+    async productsByCategory(@Args('categoryId', {type: () => ID}) categoryId: number) {
+        return await this.productService.getProductsByCategory(categoryId);
+    }
+
     @Mutation(returns => Product)
     async addProduct(
         @Args('product') product: ProductInput,

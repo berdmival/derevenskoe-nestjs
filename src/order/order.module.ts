@@ -11,6 +11,8 @@ import {AuthModule} from '../auth/auth.module';
 import {ProductModule} from '../product/product.module';
 import {ProductService} from '../product/product.service';
 import {ProductEntity} from '../product/entities/product.entity';
+import {CategoryEntity} from "../category/entities/category.entity";
+import {CategoryModule} from "../category/category.module";
 
 @Module({
     imports: [
@@ -19,10 +21,12 @@ import {ProductEntity} from '../product/entities/product.entity';
             AddressEntity,
             UserEntity,
             ProductEntity,
+            CategoryEntity
         ]),
         UserModule,
         AuthModule,
         ProductModule,
+        CategoryModule
     ],
     providers: [OrderService, OrderResolver, UserService, ProductService],
 })
