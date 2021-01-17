@@ -1,12 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
 import {JwtService} from '@nestjs/jwt';
-import {
-    AccessTokenPayload,
-    OauthTokens,
-    RefreshTokenPayload,
-    RefreshUser,
-} from '../interfaces';
+import {AccessTokenPayload, OauthTokens, RefreshTokenPayload, RefreshUser,} from '../interfaces';
 import {RoleEntity} from '../user/entities/role.entity';
 import {UserEntity} from '../user/entities/user.entity';
 import * as uuid from 'uuid';

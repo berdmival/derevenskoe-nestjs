@@ -1,13 +1,8 @@
-import {
-    Field,
-    GraphQLISODateTime,
-    ID,
-    Int,
-    ObjectType,
-} from '@nestjs/graphql';
+import {Field, GraphQLISODateTime, ID, Int, ObjectType,} from '@nestjs/graphql';
 import {User} from '../../user/models/user.model';
 import {Address} from './address.model';
 import {OrderProductServing} from './orderProductServing.model';
+import {OrderStatus} from "./orderStatus.model";
 
 @ObjectType()
 export class Order {
@@ -23,10 +18,11 @@ export class Order {
     @Field(type => Address)
     address: Address;
 
+    @Field(type => OrderStatus)
+    status: OrderStatus;
+
     @Field(type => [OrderProductServing])
     servings: OrderProductServing[];
-
-    // orderStatus: OrderStatusEntity; // TODO order status
 
     @Field(type => Int)
     costOfOrder: number;

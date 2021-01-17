@@ -1,11 +1,4 @@
-import {
-    AfterLoad,
-    BaseEntity,
-    Column,
-    Entity,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import {AfterLoad, BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn,} from 'typeorm';
 import {OrderEntity} from './order.entity';
 import {ProductEntity} from '../../product/entities/product.entity';
 

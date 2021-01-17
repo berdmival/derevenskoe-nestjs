@@ -31,13 +31,13 @@ export class UserService extends CommonCrudService<UserEntity> {
     }
 
     async create(user: UserInput) {
-        const userRole: RoleEntity = await this.findOrCreateRole(
-            this.configService.get<string>('security.roles.user'),
-        );
-
         if (!user.name) {
             user.name = `user${Date.now()}`;
         }
+
+        const userRole: RoleEntity = await this.findOrCreateRole(
+            this.configService.get<string>('security.roles.user')
+        );
 
         if (!user.roles) {
             user.roles = [];
@@ -112,9 +112,7 @@ export class UserService extends CommonCrudService<UserEntity> {
     }
 
     private async findOrCreateRole(roleName: string) {
-        let role: RoleEntity;
-
-        role = await this.roleRepository.findOne({
+        let role = await this.roleRepository.findOne({
             name: roleName,
         });
 

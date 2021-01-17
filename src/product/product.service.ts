@@ -53,6 +53,7 @@ export class ProductService extends CommonCrudService<ProductEntity> {
         );
         return await this.productRepository.save(product);
     }
+
     async deleteImage(id: number, imageName: string) {
         const product = await this.productRepository.findOneOrFail(id);
         this.imageService.deleteImageFile('product', id, imageName);

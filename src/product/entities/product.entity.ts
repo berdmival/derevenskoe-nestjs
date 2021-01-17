@@ -1,13 +1,5 @@
 import {CategoryEntity} from 'src/category/entities/category.entity';
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    AfterLoad,
-    BaseEntity,
-    ManyToOne,
-    OneToMany,
-} from 'typeorm';
+import {AfterLoad, BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
 import {OrderProductServingEntity} from '../../order/entities/orderProductServing.entity';
 
 @Entity({name: 'Products'})

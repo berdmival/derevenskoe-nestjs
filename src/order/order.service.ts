@@ -9,6 +9,7 @@ import fetch from 'node-fetch';
 import {AddressEntity} from './entities/address.entity';
 import {UserService} from '../user/user.service';
 import {UserEntity} from '../user/entities/user.entity';
+import {OrderStatusEntity} from "./entities/orderStatus.entity";
 
 @Injectable()
 export class OrderService extends CommonCrudService<OrderEntity> {
@@ -17,6 +18,8 @@ export class OrderService extends CommonCrudService<OrderEntity> {
         private readonly orderRepository: Repository<OrderEntity>,
         @InjectRepository(AddressEntity)
         private readonly addressRepository: Repository<AddressEntity>,
+        @InjectRepository(OrderStatusEntity)
+        private readonly statusRepository: Repository<OrderStatusEntity>,
         private readonly userService: UserService,
         private readonly configService: ConfigService,
     ) {
@@ -30,10 +33,14 @@ export class OrderService extends CommonCrudService<OrderEntity> {
         });
 
         if (!order.address.users) {
-            order.address.users = [order.user];
+            order.address.users = [order.user as UserEntity];
         } else if (!order.address.users.includes(order.user as UserEntity)) {
             order.address.users.push(order.user as UserEntity);
         }
+
+        order.orderStatus = await this.findOrCreateOrderStatus(
+            this.configService.get<string>('orders.statuses.new')
+        )
 
         order.date = Date.now();
 
@@ -48,6 +55,16 @@ export class OrderService extends CommonCrudService<OrderEntity> {
         }
 
         return address;
+    }
+
+    private async findOrCreateOrderStatus(statusName: string) {
+        let status = await this.statusRepository.findOne({name: statusName});
+
+        if (!status) {
+            status = await this.statusRepository.save({name: statusName});
+        }
+
+        return status;
     }
 
     // find address with Yandex Geocode and make order's address format

@@ -1,12 +1,4 @@
-import {
-    BaseEntity,
-    Column,
-    Entity,
-    JoinTable,
-    ManyToMany,
-    OneToMany,
-    PrimaryGeneratedColumn,
-} from 'typeorm';
+import {BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
 import {RoleEntity} from './role.entity';
 import {AddressEntity} from '../../order/entities/address.entity';
 import {OrderEntity} from '../../order/entities/order.entity';

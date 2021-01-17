@@ -35,7 +35,7 @@ export class ProductResolver {
         @Args('product') product: ProductInput,
         @Args('categoryId', {type: () => ID, nullable: true}) categoryId?: number
     ) {
-        if(categoryId){
+        if (categoryId) {
             const productCategory = await this.categoryService.findById(categoryId);
             const newProduct: DeepPartial<ProductEntity> = {...product, category: productCategory};
             return await this.productService.create(newProduct);
@@ -49,7 +49,7 @@ export class ProductResolver {
         @Args('product') product: ProductInput,
         @Args('categoryId', {type: () => ID, nullable: true}) categoryId?: number
     ) {
-        if(categoryId){
+        if (categoryId) {
             const productCategory = await this.categoryService.findById(categoryId);
             const newProduct: DeepPartial<ProductEntity> = {...product, category: productCategory};
             return await this.productService.update(id, newProduct);
