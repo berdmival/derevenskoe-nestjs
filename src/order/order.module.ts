@@ -13,6 +13,7 @@ import {ProductService} from '../product/product.service';
 import {ProductEntity} from '../product/entities/product.entity';
 import {CategoryEntity} from "../category/entities/category.entity";
 import {CategoryModule} from "../category/category.module";
+import {OrderStatusEntity} from "./entities/orderStatus.entity";
 
 @Module({
     imports: [
@@ -21,7 +22,8 @@ import {CategoryModule} from "../category/category.module";
             AddressEntity,
             UserEntity,
             ProductEntity,
-            CategoryEntity
+            CategoryEntity,
+            OrderStatusEntity
         ]),
         UserModule,
         AuthModule,
