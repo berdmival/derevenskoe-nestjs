@@ -31,7 +31,7 @@ export class ProductEntity extends BaseEntity {
     @ManyToOne(
         type => CategoryEntity,
         category => category.products,
-        {eager: true},
+        {eager: true, onDelete: "CASCADE"},
     )
     category: CategoryEntity;
 

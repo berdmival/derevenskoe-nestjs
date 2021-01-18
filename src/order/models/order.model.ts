@@ -9,8 +9,9 @@ export class Order {
     @Field(type => ID, {nullable: true})
     id: number;
 
-    @Field(type => GraphQLISODateTime)
-    date: Date;
+    // @Field(type => GraphQLISODateTime)
+    @Field( {nullable: true})
+    date: string;
 
     @Field(type => User)
     user: User;
@@ -18,8 +19,8 @@ export class Order {
     @Field(type => Address)
     address: Address;
 
-    @Field(type => OrderStatus)
-    status: OrderStatus;
+    @Field(type => OrderStatus, {nullable: true})
+    orderStatus: OrderStatus;
 
     @Field(type => [OrderProductServing])
     servings: OrderProductServing[];

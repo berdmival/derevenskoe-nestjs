@@ -1,7 +1,7 @@
 import {BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
 import {OrderEntity} from "./order.entity";
 
-@Entity({name: 'Roles'})
+@Entity({name: 'OrderStatuses'})
 export class OrderStatusEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;

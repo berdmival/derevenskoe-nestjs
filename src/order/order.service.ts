@@ -10,6 +10,9 @@ import {AddressEntity} from './entities/address.entity';
 import {UserService} from '../user/user.service';
 import {UserEntity} from '../user/entities/user.entity';
 import {OrderStatusEntity} from "./entities/orderStatus.entity";
+import {OrderProductServingEntity} from "./entities/orderProductServing.entity";
+import {ProductService} from "../product/product.service";
+import {OrderProductServingInput} from "./models/orderProductServing.input";
 
 @Injectable()
 export class OrderService extends CommonCrudService<OrderEntity> {
@@ -20,6 +23,9 @@ export class OrderService extends CommonCrudService<OrderEntity> {
         private readonly addressRepository: Repository<AddressEntity>,
         @InjectRepository(OrderStatusEntity)
         private readonly statusRepository: Repository<OrderStatusEntity>,
+        @InjectRepository(OrderProductServingEntity)
+        private readonly servingRepository: Repository<OrderProductServingEntity>,
+        private readonly productService: ProductService,
         private readonly userService: UserService,
         private readonly configService: ConfigService,
     ) {
@@ -42,9 +48,11 @@ export class OrderService extends CommonCrudService<OrderEntity> {
             this.configService.get<string>('orders.statuses.new')
         )
 
-        order.date = Date.now();
+        order.date = Date.now().toString();
 
-        return super.create(order);
+        const newOrder = await super.create(order);
+
+        return await this.findById(newOrder.id)
     }
 
     private async findOrCreateAddress(inputAddress: OrdersAddress) {
@@ -109,5 +117,10 @@ export class OrderService extends CommonCrudService<OrderEntity> {
         } catch (error) {
             return error;
         }
+    }
+
+    async createProductService(serving: OrderProductServingInput) {
+        const product = await this.productService.findById(serving.productId);
+        return await this.servingRepository.save({count: serving.count, product})
     }
 }

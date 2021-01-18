@@ -14,6 +14,7 @@ import {ProductEntity} from '../product/entities/product.entity';
 import {CategoryEntity} from "../category/entities/category.entity";
 import {CategoryModule} from "../category/category.module";
 import {OrderStatusEntity} from "./entities/orderStatus.entity";
+import {OrderProductServingEntity} from "./entities/orderProductServing.entity";
 
 @Module({
     imports: [
@@ -23,7 +24,8 @@ import {OrderStatusEntity} from "./entities/orderStatus.entity";
             UserEntity,
             ProductEntity,
             CategoryEntity,
-            OrderStatusEntity
+            OrderStatusEntity,
+            OrderProductServingEntity
         ]),
         UserModule,
         AuthModule,

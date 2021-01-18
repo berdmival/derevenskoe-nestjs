@@ -13,12 +13,14 @@ export class OrderProductServingEntity extends BaseEntity {
     @ManyToOne(
         type => OrderEntity,
         order => order.servings,
+        {onDelete: "CASCADE"}
     )
     order: OrderEntity;
 
     @ManyToOne(
         type => ProductEntity,
         product => product.servings,
+        {eager: true, onDelete: "CASCADE"}
     )
     product: ProductEntity;
 

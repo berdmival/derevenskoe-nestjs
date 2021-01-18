@@ -10,29 +10,33 @@ export class OrderEntity extends BaseEntity {
     id: number;
 
     @Column()
-    date: Date;
+    date: string; // TODO: making date
 
     @ManyToOne(
         type => UserEntity,
         user => user.orders,
+        {eager: true, onDelete: "CASCADE"}
     )
     user: UserEntity;
 
     @ManyToOne(
         type => AddressEntity,
         address => address.orders,
+        {eager: true}
     )
     address: AddressEntity;
 
     @OneToMany(
         type => OrderProductServingEntity,
         ops => ops.order,
+        {eager: true}
     )
     servings: OrderProductServingEntity[];
 
     @ManyToOne(
         type => OrderStatusEntity,
-        ose => ose.orders
+        ose => ose.orders,
+        {eager: true}
     )
     orderStatus: OrderStatusEntity;
 
@@ -41,7 +45,7 @@ export class OrderEntity extends BaseEntity {
     @AfterLoad()
     countCostOfOrder() {
         this.costOfOrder = Math.round(
-            this.servings.reduce(
+            this?.servings?.reduce(
                 (total, current) => total + current.costOfOrderProductServing,
                 0,
             ),

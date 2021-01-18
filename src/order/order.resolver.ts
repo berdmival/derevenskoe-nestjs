@@ -8,6 +8,7 @@ import {JwtAuthGuard} from '../auth/guards/jwt.guard';
 import {GetUserPayload} from '../auth/decorators/user.decorator';
 import {UserService} from '../user/user.service';
 import {Address} from './models/address.model';
+import {OrderProductServingEntity} from "./entities/orderProductServing.entity";
 
 @Resolver(of => Order)
 export class OrderResolver {
@@ -37,8 +38,8 @@ export class OrderResolver {
         const processedOrdersProductsServings = []; // TODO: make an interface for typing this
 
         for (const serving of order.servings) {
-            const product = await this.productService.findById(serving.productId);
-            processedOrdersProductsServings.push({count: serving.count, product});
+            const newServing = await this.orderService.createProductService(serving);
+            processedOrdersProductsServings.push(newServing);
         }
 
         const user = await this.userService.findById(userId);
