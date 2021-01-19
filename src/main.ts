@@ -30,7 +30,7 @@ async function bootstrap() {
 
     // const app = await NestFactory.create(AppModule, {httpsOptions});
     const app = await NestFactory.create(AppModule);
-    app.use(helmet()); //TODO: add helmet options
+    app.use(helmet({contentSecurityPolicy: false})); //TODO: add helmet options
     app.enableCors(corsConf);
     app.use(cookieParser(process.env.COOKIE_SECRET));
 
