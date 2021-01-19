@@ -22,6 +22,8 @@ import configuration from './configuration/default';
         GraphQLModule.forRoot({
             autoSchemaFile: true,
             context: ({req, res, ...ctx}) => ({req, res, ...ctx}),
+            playground: true,
+            introspection: true
         }),
         ProductModule,
         CategoryModule,

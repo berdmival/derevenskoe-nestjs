@@ -44,9 +44,6 @@ export class TokenService {
         const userId = this.tokens.indexes[userUID];
         if (
             userId &&
-            // this.tokens.tokens[userId] &&
-            // this.tokens.tokens[userId][userUID] &&
-            // this.tokens.tokens[userId][userUID].access &&
             this.tokens.tokens?.[userId]?.[userUID]?.access === access
         ) {
             return await this.jwtService.verifyAsync<AccessTokenPayload>(access, {
@@ -61,8 +58,6 @@ export class TokenService {
         const userId = this.tokens.indexes[userUID];
         if (
             userId &&
-            // this.tokens.tokens[userId] &&
-            // this.tokens.tokens[userId][userUID] &&
             this.tokens.tokens?.[userId]?.[userUID]?.[refresh]
         ) {
             try {
