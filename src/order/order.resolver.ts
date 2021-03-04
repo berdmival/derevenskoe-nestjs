@@ -38,7 +38,7 @@ export class OrderResolver {
         const processedOrdersProductsServings = []; // TODO: make an interface for typing this
 
         for (const serving of order.servings) {
-            const newServing = await this.orderService.createProductService(serving);
+            const newServing = await this.orderService.createProductServing(serving);
             processedOrdersProductsServings.push(newServing);
         }
 

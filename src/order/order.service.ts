@@ -13,6 +13,7 @@ import {OrderStatusEntity} from "./entities/orderStatus.entity";
 import {OrderProductServingEntity} from "./entities/orderProductServing.entity";
 import {ProductService} from "../product/product.service";
 import {OrderProductServingInput} from "./models/orderProductServing.input";
+import {URL} from 'url'
 
 @Injectable()
 export class OrderService extends CommonCrudService<OrderEntity> {
@@ -78,8 +79,10 @@ export class OrderService extends CommonCrudService<OrderEntity> {
     // find address with Yandex Geocode and make order's address format
     async makeFormattedAddresses(address: string) {
         try {
+            const mainYandexGeocoderUrl = this.configService.get<string>(
+                'yandex.url.geocoder',
+            );
             const apiKey = <string>process.env.YANDEX_KEY;
-            const rawAddress = encodeURIComponent(address);
             const leftBottom = this.configService.get<string>(
                 'yandex.boundedBy.leftBottom',
             );
@@ -87,7 +90,12 @@ export class OrderService extends CommonCrudService<OrderEntity> {
                 'yandex.boundedBy.rightTop',
             );
 
-            const url = `https://geocode-maps.yandex.ru/1.x?apikey=${apiKey}&geocode=${rawAddress}&format=json&rspn=1&bbox=${leftBottom}~${rightTop}`;
+            const url = new URL(mainYandexGeocoderUrl);
+            url.searchParams.append('apikey', apiKey);
+            url.searchParams.append('geocode', address);
+            url.searchParams.append('format', 'json');
+            url.searchParams.append('rspn', '1'); // restrict the search to the specified area
+            url.searchParams.append('bbox', `${leftBottom}~${rightTop}`); // the search area, the boundaries are set as geographical coordinates (in the sequence "longitude, latitude") of the lower-left and upper-right corners of the area.
 
             const response = await fetch(url);
             const data = await response.json();
@@ -119,7 +127,7 @@ export class OrderService extends CommonCrudService<OrderEntity> {
         }
     }
 
-    async createProductService(serving: OrderProductServingInput) {
+    async createProductServing(serving: OrderProductServingInput) {
         const product = await this.productService.findById(serving.productId);
         return await this.servingRepository.save({count: serving.count, product})
     }

@@ -1,8 +1,7 @@
 export default () => ({
     yandex: {
         url: {
-            geocode:
-                'https://geocode-maps.yandex.ru/1.x?apikey=${apiKey}&geocode=${rawAddress}&format=json&rspn=1&bbox=${leftBottom}~${rightTop}',
+            geocoder: 'https://geocode-maps.yandex.ru/1.x',
             api: 'https://api-maps.yandex.ru/2.1/?apikey=${apiKey}&lang=ru_RU',
         },
         boundedBy: {

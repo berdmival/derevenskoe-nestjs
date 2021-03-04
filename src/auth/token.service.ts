@@ -32,7 +32,7 @@ export class TokenService {
     //     }
     //   }
     // }
-    private tokens: OauthTokens = {indexes: {}, tokens: {}};
+    private tokens: OauthTokens = {indexes: {}, tokens: {}}; // TODO: change tokens object to the Map collection
 
     constructor(
         private readonly jwtService: JwtService,
