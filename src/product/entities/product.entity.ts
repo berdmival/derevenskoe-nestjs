@@ -2,6 +2,7 @@ import {CategoryEntity} from 'src/category/entities/category.entity';
 import {AfterLoad, BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn,} from 'typeorm';
 import {OrderProductServingEntity} from '../../order/entities/orderProductServing.entity';
 
+
 @Entity({name: 'Products'})
 export class ProductEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -24,6 +25,9 @@ export class ProductEntity extends BaseEntity {
 
     @Column({nullable: false, default: true})
     enabled: boolean;
+
+    @Column('text', {nullable: true})
+    shippingDayOfWeek: number[];
 
     @Column('text', {nullable: true})
     picturesNames: string[];

@@ -6,6 +6,7 @@ import {FileUpload, GraphQLUpload} from 'graphql-upload';
 import {CategoryService} from "../category/category.service";
 import {ProductEntity} from "./entities/product.entity";
 import {DeepPartial} from "typeorm";
+import {AdminAccess} from "../auth/decorators/roles.decorator";
 
 @Resolver(of => Product)
 export class ProductResolver {
@@ -31,6 +32,7 @@ export class ProductResolver {
     }
 
     @Mutation(returns => Product)
+    @AdminAccess()
     async addProduct(
         @Args('product') product: ProductInput,
         @Args('categoryId', {type: () => ID, nullable: true}) categoryId?: number
@@ -44,6 +46,7 @@ export class ProductResolver {
     }
 
     @Mutation(returns => Product)
+    @AdminAccess()
     async updateProduct(
         @Args('id', {type: () => ID}) id: number,
         @Args('product') product: ProductInput,
@@ -58,11 +61,13 @@ export class ProductResolver {
     }
 
     @Mutation(returns => Product)
+    @AdminAccess()
     async removeProduct(@Args('id', {type: () => ID}) id: number) {
         return await this.productService.remove(id);
     }
 
     @Mutation(returns => Product)
+    @AdminAccess()
     async addProductImages(
         @Args('id', {type: () => ID}) id: number,
         @Args('images', {type: () => [GraphQLUpload]}) images: FileUpload[],
@@ -71,6 +76,7 @@ export class ProductResolver {
     }
 
     @Mutation(returns => Product)
+    @AdminAccess()
     async deleteProductImage(
         @Args('id', {type: () => ID}) id: number,
         @Args('imageName') imageName: string,

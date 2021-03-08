@@ -3,6 +3,7 @@ import {CategoryService} from './category.service';
 import {CategoryInput} from './models/category.input';
 import {Category} from './models/category.model';
 import {FileUpload, GraphQLUpload} from 'graphql-upload';
+import {AdminAccess} from "../auth/decorators/roles.decorator";
 
 @Resolver(of => Category)
 export class CategoryResolver {
@@ -20,11 +21,13 @@ export class CategoryResolver {
     }
 
     @Mutation(returns => Category)
+    @AdminAccess()
     async addCategory(@Args('category') category: CategoryInput) {
         return await this.categoryService.create(category);
     }
 
     @Mutation(returns => Category)
+    @AdminAccess()
     async updateCategory(
         @Args('id', {type: () => ID}) id: number,
         @Args('category') category: CategoryInput,
@@ -33,11 +36,13 @@ export class CategoryResolver {
     }
 
     @Mutation(returns => Category)
+    @AdminAccess()
     async removeCategory(@Args('id', {type: () => ID}) id: number) {
         return await this.categoryService.remove(id);
     }
 
     @Mutation(returns => Category)
+    @AdminAccess()
     async addCategoryImage(
         @Args('id', {type: () => ID}) id: number,
         @Args('image', {type: () => GraphQLUpload}) image: FileUpload,
@@ -46,6 +51,7 @@ export class CategoryResolver {
     }
 
     @Mutation(returns => Category)
+    @AdminAccess()
     async deleteCategoryImage(@Args('id', {type: () => ID}) id: number) {
         return await this.categoryService.deleteImage(id);
     }

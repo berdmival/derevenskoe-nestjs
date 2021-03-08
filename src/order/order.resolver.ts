@@ -8,7 +8,7 @@ import {JwtAuthGuard} from '../auth/guards/jwt.guard';
 import {GetUserPayload} from '../auth/decorators/user.decorator';
 import {UserService} from '../user/user.service';
 import {Address} from './models/address.model';
-import {OrderProductServingEntity} from "./entities/orderProductServing.entity";
+import {AdminAccess, UserAccess} from "../auth/decorators/roles.decorator";
 
 @Resolver(of => Order)
 export class OrderResolver {
@@ -20,17 +20,37 @@ export class OrderResolver {
     }
 
     @Query(returns => [Order])
-    async orders() {
+    @AdminAccess()
+    async allOrders() {
         return await this.orderService.findAll();
     }
 
+    @Query(returns => [Order])
+    @UserAccess()
+    async myOrders(@GetUserPayload('userId') userId: number) {
+        const user = await this.userService.findById(userId);
+        return await this.orderService.findMyOrders(user);
+    }
+
     @Query(returns => Order)
-    async order(@Args('id', {type: () => ID}) id: number) {
+    @AdminAccess()
+    async someoneOrder(@Args('id', {type: () => ID}) id: number) {
         return await this.orderService.findById(id);
     }
 
+    @Query(returns => Order)
+    @UserAccess()
+    async myOrder(@Args('id', {type: () => ID}) id: number, @GetUserPayload('userId') userId: number) {
+        const order = await this.orderService.findById(id);
+        if (order.user.id === userId) {
+            return order
+        } else {
+            return null
+        }
+    }
+
     @Mutation(returns => Order)
-    @UseGuards(JwtAuthGuard)
+    @UserAccess()
     async createOrder(
         @Args('order') order: OrderInput,
         @GetUserPayload('userId') userId: number,
@@ -52,6 +72,7 @@ export class OrderResolver {
     }
 
     @Mutation(returns => Order)
+    @UseGuards(JwtAuthGuard)
     async deleteOrder(@Args('id', {type: () => ID}) id: number) {
         return await this.orderService.remove(id);
     }

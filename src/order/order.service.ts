@@ -33,6 +33,10 @@ export class OrderService extends CommonCrudService<OrderEntity> {
         super(orderRepository);
     }
 
+    async findMyOrders(user: UserEntity) {
+        return this.orderRepository.find({where: {user}})
+    }
+
     async create(order: DeepPartial<OrderEntity>) {
         order.address = await this.findOrCreateAddress({
             formatted: order.address.formatted,
