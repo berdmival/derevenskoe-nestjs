@@ -27,7 +27,7 @@ export class ProductEntity extends BaseEntity {
     enabled: boolean;
 
     @Column('text', {nullable: true})
-    shippingDayOfWeek: number[];
+    shippingDayOfWeek: number[]; // TODO: add this functionality to the resolvers and services
 
     @Column('text', {nullable: true})
     picturesNames: string[];
