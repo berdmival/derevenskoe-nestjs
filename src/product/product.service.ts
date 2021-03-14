@@ -5,29 +5,34 @@ import {Repository} from 'typeorm';
 import {ProductEntity} from './entities/product.entity';
 import {ImageService} from 'src/image/image.service';
 import {FileUpload} from 'graphql-upload';
-import {CategoryEntity} from "../category/entities/category.entity";
 
 @Injectable()
 export class ProductService extends CommonCrudService<ProductEntity> {
     constructor(
         @InjectRepository(ProductEntity)
         private readonly productRepository: Repository<ProductEntity>,
-        @InjectRepository(CategoryEntity)
-        private readonly categoryRepository: Repository<CategoryEntity>,
         private readonly imageService: ImageService,
     ) {
         super(productRepository);
     }
 
-    // TODO: pagination in the findAll and getProductsByCategory methods
+    // TODO: ordering and filtering in the findAll and getProductsByCategory methods
 
-    async findAll() {
-        return super.findAll();
+    async findAll(skip: number = 0, limit: number = 0) {
+        return await this.productRepository.createQueryBuilder("product")
+            .select()
+            .skip(skip)
+            .take(limit)
+            .leftJoinAndSelect("product.category", "category")
+            .getMany()
     }
 
-    async getProductsByCategory(categoryId: number) {
-        const category = await this.categoryRepository.findOne({id: categoryId}, {relations: ['products']});
-        return category ? category.products : [];
+    async getProductsByCategory(categoryId: number, skip: number = 0, limit: number = 0) {
+        return await this.productRepository.createQueryBuilder("product")
+            .innerJoinAndSelect("product.category", "category", "category.id = :categoryId", { categoryId })
+            .skip(skip)
+            .take(limit)
+            .getMany()
     }
 
     async remove(id: number) {
