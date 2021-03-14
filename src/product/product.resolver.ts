@@ -1,4 +1,4 @@
-import {Args, ID, Mutation, Query, Resolver} from '@nestjs/graphql';
+import {Args, ID, Int, Mutation, Query, Resolver} from '@nestjs/graphql';
 import {Product} from './models/product.model';
 import {ProductInput} from './models/product.input';
 import {ProductService} from './product.service';
@@ -22,13 +22,20 @@ export class ProductResolver {
     }
 
     @Query(returns => [Product])
-    async products() {
-        return await this.productService.findAll();
+    async products(
+        @Args('skip', {type: () => Int, defaultValue: 0}) skip: number,
+        @Args('limit', {type: () => Int, defaultValue: 0}) limit: number
+    ) {
+        return await this.productService.findAll(skip, limit);
     }
 
     @Query(returns => [Product])
-    async productsByCategory(@Args('categoryId', {type: () => ID}) categoryId: number) {
-        return await this.productService.getProductsByCategory(categoryId);
+    async productsByCategory(
+        @Args('categoryId', {type: () => ID}) categoryId: number,
+        @Args('skip', {type: () => Int, defaultValue: 0}) skip: number,
+        @Args('limit', {type: () => Int, defaultValue: 0}) limit: number
+    ) {
+        return await this.productService.getProductsByCategory(categoryId, skip, limit);
     }
 
     @Mutation(returns => Product)
