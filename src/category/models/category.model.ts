@@ -16,4 +16,11 @@ export class Category {
 
     @Field({defaultValue: true})
     enabled: boolean;
+
+    @Field(type => Category, {nullable: true})
+    parentCategory: Category;
+
+    @Field(type => [Category], {nullable: 'itemsAndList'})
+    childCategories: Category[]
+
 }

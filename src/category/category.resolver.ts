@@ -22,8 +22,11 @@ export class CategoryResolver {
 
     @Mutation(returns => Category)
     @AdminAccess()
-    async addCategory(@Args('category') category: CategoryInput) {
-        return await this.categoryService.create(category);
+    async addCategory(
+        @Args('category') category: CategoryInput,
+        @Args('parentId', {type: () => ID, nullable: true}) parentId?: number
+    ) {
+        return await this.categoryService.createWithParent(category, parentId);
     }
 
     @Mutation(returns => Category)
