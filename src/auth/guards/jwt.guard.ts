@@ -3,6 +3,7 @@ import {Reflector} from '@nestjs/core';
 import {GqlExecutionContext} from '@nestjs/graphql';
 import {AuthData} from 'src/interfaces';
 import {AuthService} from '../auth.service';
+import {ROLES_METADATA_KEY} from "../decorators/roles.decorator";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -14,7 +15,7 @@ export class JwtAuthGuard implements CanActivate {
 
     async canActivate(context: ExecutionContext) {
         const {req} = GqlExecutionContext.create(context).getContext();
-        const roles = this.reflector.getAllAndMerge<string[]>('role', [
+        const roles = this.reflector.getAllAndMerge<string[]>(ROLES_METADATA_KEY, [
             context.getHandler(),
             context.getClass(),
         ]);

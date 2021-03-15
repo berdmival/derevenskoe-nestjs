@@ -2,10 +2,10 @@ import {UseGuards} from '@nestjs/common';
 import {Args, Mutation, Resolver} from '@nestjs/graphql';
 import {GetCredentials} from './decorators/credentials.decorator';
 import {AuthData} from '../interfaces';
-import {JwtAuthGuard} from './guards/jwt.guard';
 import {PasswordAuthGuard} from './guards/password.guard';
 import {AuthService} from './auth.service';
 import {GetUserPayload} from './decorators/user.decorator';
+import {LoggedInAccess} from "./decorators/roles.decorator";
 
 @Resolver()
 export class AuthResolver {
@@ -19,7 +19,7 @@ export class AuthResolver {
     }
 
     @Mutation(returns => Boolean)
-    @UseGuards(JwtAuthGuard)
+    @LoggedInAccess()
     async logout(
         @Args('all') all: boolean,
         @GetCredentials('userUID') userUID: string,

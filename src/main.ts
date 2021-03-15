@@ -10,10 +10,10 @@ async function bootstrap() {
     const HTTPS_CRT = <string>process.env.HTTPS_CRT;
     const HTTPS_KEY = <string>process.env.HTTPS_KEY;
 
-    // const httpsOptions: HttpsOptions = {
-    //     cert: fs.readFileSync(HTTPS_CRT),
-    //     key: fs.readFileSync(HTTPS_KEY),
-    // };
+    const httpsOptions: HttpsOptions = {
+        cert: fs.readFileSync(HTTPS_CRT),
+        key: fs.readFileSync(HTTPS_KEY),
+    };
 
     // TODO: security (helmet, cors etc.)
 
@@ -28,8 +28,8 @@ async function bootstrap() {
         credentials: true,
     };
 
-    // const app = await NestFactory.create(AppModule, {httpsOptions});
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule, {httpsOptions});
+    // const app = await NestFactory.create(AppModule);
     app.use(helmet({contentSecurityPolicy: false})); //TODO: add helmet options
     app.enableCors(corsConf);
     app.use(cookieParser(process.env.COOKIE_SECRET));

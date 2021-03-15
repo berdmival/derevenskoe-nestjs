@@ -2,16 +2,14 @@ import {applyDecorators, SetMetadata, UseGuards} from '@nestjs/common';
 import config from '../../configuration/default';
 import {JwtAuthGuard} from '../guards/jwt.guard';
 
-// TODO: take values from config
+export const ROLES_METADATA_KEY = Symbol('roles')
 
-export const UserAccess = () =>
+const RoleAccess = (roles: string[]) =>
     applyDecorators(
-        SetMetadata('role', config().security.roles.user),
+        SetMetadata(ROLES_METADATA_KEY, roles),
         UseGuards(JwtAuthGuard),
     );
 
-export const AdminAccess = () =>
-    applyDecorators(
-        SetMetadata('role', config().security.roles.admin),
-        UseGuards(JwtAuthGuard),
-    );
+export const LoggedInAccess = () => RoleAccess([])
+export const UserAccess = () => RoleAccess([config().security.roles.user])
+export const AdminAccess = () => RoleAccess([config().security.roles.admin])

@@ -3,9 +3,7 @@ import {UserInput} from './models/user.input';
 import {User} from './models/user.model';
 import {UserService} from './user.service';
 import {FileUpload, GraphQLUpload} from 'graphql-upload';
-import {UseGuards} from "@nestjs/common";
-import {JwtAuthGuard} from "../auth/guards/jwt.guard";
-import {AdminAccess} from "../auth/decorators/roles.decorator";
+import {AdminAccess, LoggedInAccess} from "../auth/decorators/roles.decorator";
 
 @Resolver()
 export class UserResolver {
@@ -19,19 +17,18 @@ export class UserResolver {
     }
 
     @Query(returns => User)
-    @UseGuards(JwtAuthGuard)
+    @LoggedInAccess()
     async user(@Args('id', {type: () => ID}) id: number) {
         return await this.userService.findById(id);
     }
 
     @Mutation(returns => User)
-    @UseGuards(JwtAuthGuard)
     async registerUser(@Args('user') user: UserInput) {
         return await this.userService.create(user);
     }
 
     @Mutation(returns => User)
-    @UseGuards(JwtAuthGuard)
+    @LoggedInAccess()
     async updateUser(
         @Args('id', {type: () => ID}) id: number,
         @Args('user') user: UserInput,
@@ -40,7 +37,7 @@ export class UserResolver {
     }
 
     @Mutation(returns => User)
-    @UseGuards(JwtAuthGuard)
+    @LoggedInAccess()
     async removeUser(@Args('id', {type: () => ID}) id: number) {
         return await this.userService.remove(id);
     }
@@ -58,7 +55,7 @@ export class UserResolver {
     }
 
     @Mutation(returns => User)
-    @UseGuards(JwtAuthGuard)
+    @LoggedInAccess()
     async addUserImage(
         @Args('id', {type: () => ID}) id: number,
         @Args('image', {type: () => GraphQLUpload}) image: FileUpload,
@@ -67,7 +64,7 @@ export class UserResolver {
     }
 
     @Mutation(returns => User)
-    @UseGuards(JwtAuthGuard)
+    @LoggedInAccess()
     async deleteUserImage(@Args('id', {type: () => ID}) id: number) {
         return await this.userService.deleteImage(id);
     }

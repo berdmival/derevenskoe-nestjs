@@ -154,8 +154,8 @@ export class TokenService {
     private getFormattedRoles = (user: any): string[] => {
         let formattedRoles: string[] = [];
 
-        if (user.Roles && user.Roles.length > 0) {
-            formattedRoles = user.Roles.reduce(
+        if (user.roles && user.roles.length > 0) {
+            formattedRoles = user.roles.reduce(
                 (total: string[], current: RoleEntity) => {
                     total.push(current.name);
                     return total;

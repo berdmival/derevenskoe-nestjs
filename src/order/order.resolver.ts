@@ -3,12 +3,10 @@ import {OrderService} from './order.service';
 import {Order} from './models/order.model';
 import {OrderInput} from './models/order.input';
 import {ProductService} from '../product/product.service';
-import {UseGuards} from '@nestjs/common';
-import {JwtAuthGuard} from '../auth/guards/jwt.guard';
 import {GetUserPayload} from '../auth/decorators/user.decorator';
 import {UserService} from '../user/user.service';
 import {Address} from './models/address.model';
-import {AdminAccess, UserAccess} from "../auth/decorators/roles.decorator";
+import {AdminAccess, LoggedInAccess} from "../auth/decorators/roles.decorator";
 
 @Resolver(of => Order)
 export class OrderResolver {
@@ -26,7 +24,7 @@ export class OrderResolver {
     }
 
     @Query(returns => [Order])
-    @UserAccess()
+    @LoggedInAccess()
     async myOrders(@GetUserPayload('userId') userId: number) {
         const user = await this.userService.findById(userId);
         return await this.orderService.findMyOrders(user);
@@ -39,7 +37,7 @@ export class OrderResolver {
     }
 
     @Query(returns => Order)
-    @UserAccess()
+    @LoggedInAccess()
     async myOrder(@Args('id', {type: () => ID}) id: number, @GetUserPayload('userId') userId: number) {
         const order = await this.orderService.findById(id);
         if (order.user.id === userId) {
@@ -50,7 +48,7 @@ export class OrderResolver {
     }
 
     @Mutation(returns => Order)
-    @UserAccess()
+    @LoggedInAccess()
     async createOrder(
         @Args('order') order: OrderInput,
         @GetUserPayload('userId') userId: number,
@@ -72,7 +70,7 @@ export class OrderResolver {
     }
 
     @Mutation(returns => Order)
-    @UseGuards(JwtAuthGuard)
+    @LoggedInAccess()
     async deleteOrder(@Args('id', {type: () => ID}) id: number) {
         return await this.orderService.remove(id);
     }
