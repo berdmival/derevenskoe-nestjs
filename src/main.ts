@@ -19,10 +19,10 @@ async function bootstrap() {
 
     const corsConf = {
         origin: [
-            'http://localhost:3000',
-            'http://192.168.56.1:3000',
-            'https://localhost:3000',
-            'https://192.168.56.1:3000',
+            'http://localhost:4200',
+            'http://192.168.56.1:4200',
+            'https://localhost:4200',
+            'https://192.168.56.1:4200',
         ],
         exposedHeaders: ['X-Pagination', 'Authorization'],
         credentials: true,
