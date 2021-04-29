@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "-": "0.0.1",
-    "@nestjs/common": "^7.0.0",
+    "@nestjs/common": "^7.6.15",
     "@nestjs/config": "^0.5.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/graphql": "^7.7.0",
@@ -45,7 +45,7 @@
     "uuid": "^8.3.1"
   },
   "devDependencies": {
-    "@nestjs/cli": "^7.0.0",
+    "@nestjs/cli": "^7.6.0",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
     "@types/bcrypt": "^3.0.0",
